@@ -6,6 +6,7 @@ var mapMenu = {
     ,isActive:false
     ,fields : ['id','proCategory','proAccount','proName','proPrice','proThumnail','proDetail','proStatus']
     ,storageKey:'product.html'
+    
   }
   ,'Orders':{
     pageURL:'order.html'
