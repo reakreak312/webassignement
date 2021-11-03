@@ -303,6 +303,7 @@ function doEditRecord(proId) {
 function doSave() {
   if(confirm('save to local storage?')){
     save2Storage(activeMenu.storageKey,activeMenu.data);
+    location.reload();
   }
 }
 
