@@ -24,6 +24,8 @@ var mapMenu = {
     ,notRequired:['id','accDescription']
     //Id prefix e.g: PRO001
     ,prefixKey:'ACC'
+    //is override default function?
+    ,isOverride:false
   }
   ,'Products':{
     pageURL:'product.html'
@@ -35,6 +37,7 @@ var mapMenu = {
     ,formName:'productfm'
     ,notRequired:['id','proThumnail','proDetail']
     ,prefixKey:'PRO'
+    ,isOverride:false
   }
   ,'Orders':{
     pageURL:'order.html'
@@ -45,6 +48,7 @@ var mapMenu = {
     ,data : []
     ,formName:''
     ,prefixKey:''
+    ,isOverride:true
   }
 };
 
@@ -173,7 +177,7 @@ function retrieveFromStorage(key) {
 
 function loadDataOfMenu(){
   if (activeMenu==null) return;
-  laodData();
+  if (!activeMenu.isOverride) laodData();
 }
 
 //Start Products Page ==========
