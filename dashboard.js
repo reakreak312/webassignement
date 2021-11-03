@@ -1,12 +1,40 @@
+//menu must setup in here
+//@each menu must the same structure
+//@add @remove @update @save @rendertable @clear @loadmenu 
+//all this function using the same logic for each menu page
+//@html file should be the same structure
 var mapMenu = {
-  
-  'Products':{
+  //menu name
+  'Accounts':{
+    //file name with html extension
+    pageURL:'account.html'
+    //icon of menu
+    ,icon:'fas fa-users fa-lg'
+    //is active page?
+    ,isActive:false
+    //fields of table @should the same header of <th>
+    ,fields : ['id','accStaff','accRole','accUsername','accPassword','accStatus','accDescription']
+    //local storage @key for store JSON data
+    ,storageKey:'account.html'
+    //data for table
+    ,data : []
+    //name of input form
+    ,formName:'accountfm'
+    //fields could be blank
+    ,notRequired:['id','accDescription']
+    //Id prefix e.g: PRO001
+    ,prefixKey:'ACC'
+  }
+  ,'Products':{
     pageURL:'product.html'
     ,icon:'fas fa-file-signature fa-lg'
     ,isActive:false
     ,fields : ['id','proCategory','proAccount','proName','proPrice','proThumnail','proDetail','proStatus']
     ,storageKey:'product.html'
-    
+    ,data : []
+    ,formName:'productfm'
+    ,notRequired:['id','proThumnail','proDetail']
+    ,prefixKey:'PRO'
   }
   ,'Orders':{
     pageURL:'order.html'
@@ -14,27 +42,14 @@ var mapMenu = {
     ,isActive:false
     ,fields : []
     ,storageKey:''
+    ,data : []
+    ,formName:''
+    ,prefixKey:''
   }
 };
 
+//@key of all function, can't not null/undefined
 var activeMenu = null;
-
-var listProduct = [
-  /*
-  {
-    id:'default'
-    ,proCategory:'default'
-    ,proAccount:'default'
-    ,proName:'default'
-    ,proPrice:'default'
-    ,proThumnail:'default'
-    ,proDetail:'default'
-    ,proStatus:'default'
-  }
-  */
-];
-
-
 
 init();
 
@@ -139,7 +154,7 @@ function setActivePage() {
     }
   }
   const dt = retrieveFromStorage(activeMenu.storageKey);
-  if(dt!=undefined&&dt!=null&&dt.length>0) listProduct = dt;
+  if(dt!=undefined&&dt!=null&&dt.length>0) activeMenu.data = dt;
 }
 
 function save2Storage(key,data) {
@@ -158,17 +173,18 @@ function retrieveFromStorage(key) {
 
 function loadDataOfMenu(){
   if (activeMenu==null) return;
-  if (activeMenu.pageURL==='product.html') laodProduct();
+  laodData();
 }
 
-//==========
+//Start Products Page ==========
 
-function laodProduct() {
+function laodData() {
+  // console.log('activeMenu ? ',activeMenu);
   var tblbody = document.getElementsByTagName('tbody')[0];
   let atr ='';
-  for (let index = 0; index < listProduct.length; index++) {
+  for (let index = 0; index < activeMenu.data.length; index++) {
     let tr ='<tr>';
-    const pro = listProduct[index];
+    const pro = activeMenu.data[index];
     // console.log(pro);
     let x=1, atd='';
     for (const ix in activeMenu.fields) {
@@ -182,10 +198,10 @@ function laodProduct() {
     }
     let btn =
     '<td>'
-    +    '<button onclick="doRemoveProduct(\''+pro.id+'\');" class="mx-1 px-1 py-0 btn btn-sm btn-outline-danger p-2">'
+    +    '<button onclick="doRemoveRecord(\''+pro.id+'\');" class="mx-1 px-1 py-0 btn btn-sm btn-outline-danger p-2">'
     +        '<i class="fas fa-trash-alt"></i>'
     +    '</button>'
-    +    '<a onclick="doEditProduct(\''+pro.id+'\');" class="mx-1 px-1 py-0 btn btn-sm btn-outline-primary p-2" href="#" role="button">'
+    +    '<a onclick="doEditRecord(\''+pro.id+'\');" class="mx-1 px-1 py-0 btn btn-sm btn-outline-primary p-2" href="#" role="button">'
     +        '<i class="fas fa-edit"></i>'
     +    '</a>'
     +'</td>';
@@ -197,36 +213,36 @@ function laodProduct() {
 }
 
 function validProduct(object) {
-  const notRequiredfields = ['id','proThumnail','proDetail'];
+  const notRequiredfields = activeMenu.notRequired;
   for (const key in object) {
-    if (!notRequiredfields.includes(key) && (object[key]==undefined || object[key]=='' || object[key]=='--None--')) return key.replace('pro','');
+    if (!notRequiredfields.includes(key) && (object[key]==undefined || object[key]=='' || object[key]=='--None--')) return key.replace(key.substring(0,3),'');
   }
   return null;
 }
 
-function doAddProduct(evt) {
+function doAdd(evt) {
   var act = evt.target.innerHTML;
 
     const fields = activeMenu.fields;
-    let fdoc = document.productfm;
-    var product = {};
+    let fdoc = document[activeMenu.formName];
+    var rec = {};
     for (let i in fields){
       const x = fields[i];
-      if(fdoc[x]!=undefined) product[x] = fdoc[x].value;
+      if(fdoc[x]!=undefined) rec[x] = fdoc[x].value;
     }
     const max=9999,min=1000;
-    let f = validProduct(product);
+    let f = validProduct(rec);
     if(f!=null) return alert('please fill the value of ['+f+']');
     if(act=='Add') {
-      product['id'] = 'P'+Math.floor(Math.random() * (max - min + 1) + min);
-      listProduct.unshift(product);
+      rec['id'] = activeMenu.prefixKey+Math.floor(Math.random() * (max - min + 1) + min);
+      activeMenu.data.unshift(rec);
     }
     else {
-      updateProduct(product);
+      updateRecord(rec);
     }
-    console.log(product);
+    // console.log(rec);
   
-  laodProduct();
+  laodData();
 }
 
 function clearProductForm(params) {
@@ -242,54 +258,51 @@ function clearProductForm(params) {
   }
 }
 
-function updateProduct(pro) {
-  for (const ix in listProduct) {
-    if (listProduct[ix].id==pro.id) listProduct[ix] = pro;
+function updateRecord(pro) {
+  for (const ix in activeMenu.data) {
+    if (activeMenu.data[ix].id==pro.id) activeMenu.data[ix] = pro;
   }
-  var btn = document.getElementById('doAddProductBtn');
+  var btn = document.getElementById('doAddBtn');
   btn.innerHTML='Add';
   const fields = activeMenu.fields;
-  let fdoc = document.productfm;
+  let fdoc = document[activeMenu.formName];
   for (let i in fields){
     const x = fields[i];
     if(fdoc[x]!=undefined){
-      if (x=='proCategory' || x=='proAccount' || x=='proStatus') {
-        fdoc[x].value='--None--';
-      }
-      else fdoc[x].value='';
+      fdoc[x].value='';
     }
   }
 }
 
-function doRemoveProduct(proId) {
-  for (const ix in listProduct) {
-    if (listProduct[ix].id==proId) {
+function doRemoveRecord(proId) {
+  for (const ix in activeMenu.data) {
+    if (activeMenu.data[ix].id==proId) {
       if (confirm('are you sure want to remove this record?')) {
-        listProduct.splice(ix, 1);
-        laodProduct();
+        activeMenu.data.splice(ix, 1);
+        laodData();
       }
     }
   }
 }
 
-function doEditProduct(proId) {
-  for (const ix in listProduct) {
-    if (listProduct[ix].id==proId) {
+function doEditRecord(proId) {
+  for (const ix in activeMenu.data) {
+    if (activeMenu.data[ix].id==proId) {
       const fields = activeMenu.fields;
-      let fdoc = document.productfm;
+      let fdoc = document[activeMenu.formName];
       for (let i in fields){
         const x = fields[i];
-        if(fdoc[x]!=undefined) fdoc[x].value=listProduct[ix][x];
+        if(fdoc[x]!=undefined) fdoc[x].value=activeMenu.data[ix][x];
       }
     }
   }
-  var btn = document.getElementById('doAddProductBtn');
+  var btn = document.getElementById('doAddBtn');
   btn.innerHTML='Save Change';
 }
 
-function doSaveProduct() {
+function doSave() {
   if(confirm('save to local storage?')){
-    save2Storage(activeMenu.storageKey,listProduct);
+    save2Storage(activeMenu.storageKey,activeMenu.data);
   }
 }
 
@@ -297,6 +310,7 @@ function doCancel() {
   if(confirm('are you sure want to cancel?')) location.reload();
 }
 
+//End Products Page ==========
 /*
 var dasboard = '<h2>This is Dasboard page content</h2>';
 var order = '<h2>This is order page content</h2>';
