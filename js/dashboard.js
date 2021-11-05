@@ -325,6 +325,7 @@ function doRemoveRecord(proId) {
       if (confirm('are you sure want to remove this record?')) {
         activeMenu.data.splice(ix, 1);
         laodData();
+        // showToast('record remove success!');
       }
     }
   }
@@ -419,7 +420,7 @@ function loadOption(element,relateToKey,value,label) {
     if(menu!=undefined){
       let opts = '';
       let data = retrieveFromStorage(menu.storageKey);
-      console.log(data);
+      // console.log(data);
       for (const inx in data) {
         const rec = data[inx];
         opts+='<option value="'+rec[value]+'">'+rec[label]+'</option>';
@@ -430,8 +431,28 @@ function loadOption(element,relateToKey,value,label) {
     }
   }
 }
+
+function showToast(message) {
+  document.getElementById('toastBody').innerHTML='<b>'+message+'</b>';
+  var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+  var toastList = toastElList.map(function(toastEl) {
+    return new bootstrap.Toast(toastEl)
+  })
+  toastList.forEach(toast => toast.show()) 
+}
 //End Products Page ==========
 
+function getToast() {
+  return '<div class="toast top-0 start-50 translate-middle-x" role="alert" aria-live="assertive" aria-atomic="true" autohide="true">'
+  +    '<div class="toast-header">'
+  +      '<strong class="me-auto">Message</strong>'
+  +      '<button type="button" class="btn-close" data-bs-dismiss="toast"></button>'
+  +    '</div>'
+  +    '<div class="toast-body" id="toastBody">'
+  +      '<p>Some text inside the toast body</p>'
+  +    '</div>'
+  +  '</div>';
+}
 //@dasboard fix page
 
 function getDasboardTemplete(menuLi) {
@@ -449,6 +470,7 @@ function getDasboardTemplete(menuLi) {
   +    '</div>'
   +  '</div>'
   +'</header>'
+  // +getToast()
   +'<div class="container-fluid">'
   +  '<div class="row" id="toprow">'
   +    '<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse" style="border: 5px solid #191c1f;">'
