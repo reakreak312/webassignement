@@ -470,6 +470,7 @@ function getDasboardTemplete(menuLi) {
   +    '</div>'
   +  '</div>'
   +'</header>'
+  // sadasdasd
   // +getToast()
   +'<div class="container-fluid">'
   +  '<div class="row" id="toprow">'
