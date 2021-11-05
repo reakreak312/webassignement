@@ -1,0 +1,134 @@
+<!-- ==================== -->
+<!--   By @Soue Sovankiry -->
+<!-- ==================== -->
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+        <meta name="generator" content="Hugo 0.84.0">
+        <title>Dashboard Template · Bootstrap v5.0</title>
+
+        <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/dashboard/">
+
+        <!-- Bootstrap core CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        
+        <!-- Font Awsome -->
+        <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+
+        <!-- Custom styles for this template -->
+        <link href="css/dashboard.css" rel="stylesheet">
+
+    </head>
+    <body id="body">
+        <main id="pageContent">
+            <div class="p-2 .bg-light.bg-gradient">
+                <div class="col add-new">
+                    <div class="d-flex justify-content-end">
+                        <a id="addNewModel" onclick="clearForm();" class="btn btn-primary" data-bs-toggle="modal" href="#exampleModalToggle" role="button">Add New</a>
+                        <a style="margin-left:10px;" class="btn btn-success" href="#" role="button"
+                        onclick="doSave();">Save</a>
+                    </div>
+                    <br>
+                    <div class="d-flex justify-content-end">
+                      <input type="text" name="searching"  class="m-1" :placeholder="search.." />
+                      <label for="">Search</label>
+                    </div>
+                    <table class="table">
+                        <thead class="bg-info">
+                          <tr>
+                            <th scope="col">No</th>
+                            <th scope="col">ID</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Gender</th>
+                            <th scope="col">Address</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Phone</th>
+                            <th scope="col">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <th scope="row">1</th>
+                            <td>MImama</td>
+                            <td>F</td>
+                            <td>#312</td>
+                            <td>ry@gmail.com</td>
+                            <td>087376736</td>
+                            
+                          </tr>
+                          
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- create New -->
+
+            <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content col-sm-12">
+                        <div class="modal-header">
+                            <form name="supplierfm" class="col-sm-12 m-auto ">
+                                <h1>Stock</h1>
+                                <!-- <div class="mb-3 col-sm-12">
+                                <label for="" class="form-label">Sup ID</label>
+                                <input type="number" class="form-control" id="">
+                                </div> -->
+                                <input type="hidden" name="id">
+                                <div class="mb-3 col-sm-12">
+                                    <label for="" class="form-label">Name</label>
+                                    <input name="supName" type="text" class="form-control" id="">
+                                </div>
+                                <div class="mb-3 col-sm-12">
+                                    <label for="" class="form-label">Gender</label>
+                                    <select name="supGender" class="form-select" aria-label="Default select example">
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3 col-sm-12">
+                                    <label for="" class="form-label">Address</label>
+                                    <input name="supAddress" type="text" class="form-control" id="" placeholder="#312">
+                                
+                                </div>
+                                <div class="mb-3 col-sm-12">
+                                    <label for="" class="form-label">Email</label>
+                                    <input name="supEmail" type="Text" class="form-control" id="">
+                                </div>
+                    
+                                <div class="mb-3 col-sm-12">
+                                    <label for="" class="form-label">Phone</label>
+                                    <input name="supPhone" type="number" class="form-control" id="" placeholder="Phone Number">
+                                </div>
+            
+                                <div class=" ">
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                                    <a id="doAddBtn" style="margin-left:10px;" class="btn btn-primary" href="#" role="button"
+                                    onclick="doAdd(event);">Add</a>
+                                </div>
+                                
+                            </form>
+                        </div>
+                        <!-- <div class="modal-body">
+                        Show a second modal and hide this one with the button below.
+                        </div>
+                        <div class="modal-footer">
+                        <button class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Open second modal</button>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </body>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
+    <script src="js/dashboard.js"></script>
+    
+</html>
