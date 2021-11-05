@@ -41,7 +41,6 @@
                     <table class="table">
                         <thead class="bg-info">
                           <tr>
-                            <th scope="col">No</th>
                             <th scope="col">Id</th>
                             <th scope="col">Full Name</th>
                             <th scope="col">Gender</th>
@@ -70,43 +69,45 @@
             </div>
             <!-- create New -->
             <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
-                <div class="modal-dialog">
-                  <div class="modal-content col-sm-12">
-                    <div class="modal-header">
-                        <form name="customerfm" class="col-sm-12 m-auto ">
-                          <h1>Form Create Customer</h1>
-                            <input type="hidden" name="id">
-                            <div class="mb-3 col-sm-12">
-                                <label for="" class="form-label">Full Name</label>
-                                <input name="cusFullName" type="text" class="form-control" id="" placeholder="Full Name">
-                            </div>
-                            <div class="mb-3 col-sm-12">
-                                <label for="" class="form-label">Gender</label>
-                                <select name="cusGender" class="form-select" aria-label="Default select example">
-                                    <option selected>Please Select ..</option>
-                                    <option value="1">Male</option>
-                                    <option value="2">Famale</option>
-                                </select>
-                            </div>
-                            <div class="mb-3 col-sm-12">
-                                <label for="" class="form-label">Phone Number</label>
-                                <input name="cusPhone" type="text" class="form-control" id="" placeholder="Phone Number">
-                            </div>
-                            <div class="mb-3 col-sm-12">
-                                <label for="" class="form-label">Address</label>
-                                <!-- <input name="cusAddress" type="text" class="form-control" id="" placeholder="Address"> -->
-                                <textarea name="cusAddress" id="" cols="30" rows="5" class="form-control" placeholder="Address"></textarea>
-                            </div>
-                            <div class=" ">
-                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                                <a id="doAddBtn" style="margin-left:10px;" class="btn btn-primary" href="#" role="button"
-                                onclick="doAdd(event);">Add</a>
-                            </div>
-                            
-                        </form>
-                    </div>
+              <div class="modal-dialog" style="background-color: rgba(0, 255, 255, 0.651); padding: 5px; border-radius: 5px;">
+                <div class="modal-content col-sm-12">
+                  <div style="background-color:darkgrey;   border-bottom: 3px solid lightslategray">
+                    <center><h1 style="color: coral; font-size: 25px;"><b>Customer</b></h1></center> 
                 </div>
+                  <div class="modal-header">
+                      <form name="customer" class="col-sm-12 m-auto ">
+                          <input type="hidden" name="id">
+                          <div class="mb-3 col-sm-12">
+                              <label for="" class="form-label" style="color:#00FA9A;"> <span>Name*</span> </label>
+                              <input name="cusFullName" type="text" class="form-control" id="" placeholder="Full Name">
+                          </div>
+                          <div class="mb-3 col-sm-12">
+                            <label for="" class="form-label" style="color:#00FA9A;"> <span>Gender*</span> </label>
+                            <br>
+                            <label for="male">Male</label>
+                            <input type="radio" name="gender" id="male" value="male" checked>
+                            <label for="female">Female</label>
+                            <input type="radio" name="gender" id="female" value="female">
+                        </div>
+                          <div class="mb-3 col-sm-12">
+                              <label for="" class="form-label" style="color:#00FA9A;"> <span>Phone Number*</span> </label>
+                              <input name="cusPhone" type="text" class="form-control" id="" placeholder="Phone Number">
+                          </div>
+                          <div class="mb-3 col-sm-12">
+                              <label for="" class="form-label" style="color:#00FA9A;"> <span>Address*</span> </label>
+                              <!-- <input name="cusAddress" type="text" class="form-control" id="" placeholder="Address"> -->
+                              <textarea name="cusAddress" id="" cols="30" rows="5" class="form-control" placeholder="Address"></textarea>
+                          </div>
+                          <div class=" ">
+                              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                              <a id="doAddBtn" style="margin-left:10px;" class="btn btn-primary" href="#" role="button"
+                              onclick="doAdd(event);">Add</a>
+                          </div>
+                          
+                      </form>
+                  </div>
               </div>
+            </div>
             </div>
         </main>
     </body>
