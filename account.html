@@ -35,13 +35,12 @@
                 </div>
                 <br>
                 <div class="d-flex justify-content-end">
-                    <input type="text" name="searching"  class="m-1" :placeholder="search.." />
+                    <input type="text" name="searching"  class="m-1" placeholder="search.." />
                     <label for="">Search</label>
                 </div>
                 <table class="table">
                     <thead class="bg-info">
                     <tr>
-                        <th scope="col">No</th>
                         <th scope="col">ID</th>
                         <th scope="col">ID Staff</th>
                         <th scope="col">Username</th>
@@ -72,10 +71,13 @@
             </div>
             <!-- create New -->
             <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
-                <div class="modal-dialog">
+                <div class="modal-dialog" style="background-color: rgba(0, 255, 255, 0.651); padding: 5px; border-radius: 5px;">
                     <div class="modal-content col-sm-12">
+                        <div style="background-color:darkgrey;   border-bottom: 3px solid lightslategray;">
+                            <center><h1 style="color: coral; font-size: 25px;"> <b> Account</b></h1></center> 
+                          </div>
                         <div class="modal-header">
-                            <form name="accountfm" class="col-sm-12 m-auto ">
+                            <form name="account" class="col-sm-12 m-auto ">
                                 <h1>Account</h1>
                                 <div class="mb-3 col-sm-12">
                                 <input type="hidden" name="id">
@@ -83,31 +85,27 @@
                                 <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter ID"> -->
                                 </div>
                                 <div class="mb-3 col-sm-12">
-                                    <label for="" class="form-label">ID Staff</label>
-                                    <!-- <input name="accStaffId" type="text" class="form-control"> -->
-                                    <select name="accStaffId" class="form-select" aria-label="Default select example">
-                                        <option>--None--</option>
-                                        <option>--XXXXX--</option>
-                                    </select>
+                                <label for="" class="form-label" style="color:#00FA9A;"><span>ID Staff*</span></label>
+                                <input name="accStaffId" type="text" class="form-control">
                                 </div>
                                 <div class="mb-3 col-sm-12">
-                                <label for="" class="form-label">Username</label>
-                                <input name="accUsername" type="text" class="form-control" id="1" placeholder="Enter Username">
+                                <label for="" class="form-label" style="color:#00FA9A;"><span>Username*</span></label>
+                                <input name="accUsername" type="text" class="form-control" id="1" placeholder="Username">
                                 </div>
                                 <div class="mb-3 col-sm-12">
-                                <label for="" class="form-label">Role</label>
-                                <select name="accRole" class="form-select" aria-label="Default select example">
+                                <label for="" class="form-label" style="color:#00FA9A;"><span>Role*</span></label>
+                                <select  name="accRole" class="form-select" aria-label="Default select example">
                                     <option selected>Select Role</option>
                                     <option value="1">1</option>
                                     <option value="2">2</option>
                                 </select>
                                 </div>
                                 <div class="mb-3 col-sm-12">
-                                <label for="" class="form-label">Password</label>
-                                <input name="accPassword" type="password" class="form-control" placeholder="enter password">
+                                <label for="" class="form-label" style="color:#00FA9A;"><span>Password*</span></label>
+                                <input name="accPassword" type="password" class="form-control" placeholder="Password">
                                 </div>
                                 <div class="mb-3 col-sm-12">
-                                <label for="" class="form-label">Status</label>
+                                <label for="" class="form-label" style="color:#00FA9A;">Status</label>
                                 <select name="accStatus" class="form-select" aria-label="Default select example">
                                     <option selected>Select</option>
                                     <option value="1">1</option>

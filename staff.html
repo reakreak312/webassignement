@@ -63,47 +63,54 @@
 
             <!-- create New -->
             <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
-                <div class="modal-dialog">
+                <div class="modal-dialog" style="background-color: rgba(0, 255, 255, 0.651); padding: 5px; border-radius: 5px;">
                     <div class="modal-content col-sm-12">
+                        <div style="background-color:darkgrey;   border-bottom: 3px solid lightslategray">
+                            <center><h1 style="color: coral; font-size: 25px;"><b>Staff</b></h1></center> 
+                        </div>
                         <div class="modal-header">
                             <form name="stafffm" class="col-sm-12 m-auto ">
-                                <h1>Form Create Staff</h1>
                                 <input type="hidden" name="id">
-                                <div class="mb-3 col-sm-12">
-                                    <label for="" class="form-label">Name(KH)</label>
-                                    <input name="stfNameKH" type="email" class="form-control" id="" placeholder="Full Name">
+                                <div class="row">
+                                    <div class="mb-3 col-sm-6">
+                                        <label for="" class="form-label" style="color:#00FA9A;"><span>Khmer (KH)</span></label>
+                                        <input name="stfNameKH" type="email" class="form-control" id="" placeholder="Khmer">
+                                    </div>
+                                    <div class="mb-3 col-sm-6">
+                                        <label for="" class="form-label" style="color:#00FA9A;">English (En)</label>
+                                        <input name="stfNameEN" type="email" class="form-control" id="" placeholder="English">
+                                    </div>
                                 </div>
                                 <div class="mb-3 col-sm-12">
-                                    <label for="" class="form-label">Name(En)</label>
-                                    <input name="stfNameEN" type="email" class="form-control" id="" placeholder="Full Name">
+                                    <label for="" class="form-label" style="color:#00FA9A;"> <span>Gender*</span> </label>
+                                    <br>
+                                    <label for="male">Male</label>
+                                    <input type="radio" name="gender" id="male" value="male" checked>
+                                    <label for="female">Female</label>
+                                    <input type="radio" name="gender" id="female" value="female">
                                 </div>
-                                <div class="mb-3 col-sm-12">
-                                    <label for="" class="form-label">Gender</label>
-                                    <select name="stfGender" class="form-select" aria-label="Default select example">
-                                        <option selected>Please Select ..</option>
-                                        <option value="1">Male</option>
-                                        <option value="2">Famale</option>
-                                    </select>
+                                <div class="row">
+                                    <div class="mb-3 col-sm-6">
+                                        <label for="" class="form-label" style="color:#00FA9A;"> <span>Date of birth*</span> </label>
+                                        <input name="stfDateOfBirth" type="date" class="form-control" id="" >
+                                    </div>
+                                    <div class="mb-3 col-sm-6">
+                                        <label for="" class="form-label" style="color:#00FA9A;"> <span>Hire date*</span> </label>
+                                        <input name="stfHireData" type="date" class="form-control" id="">
+                                    </div>
                                 </div>
-                                <div class="mb-3 col-sm-12">
-                                    <label for="" class="form-label">Date of birth</label>
-                                    <input name="stfDateOfBirth" type="date" class="form-control" id="" placeholder="Phone Number">
-                                    
-                                </div>
-                                <div class="mb-3 col-sm-12">
-                                    <label for="" class="form-label">Hire date</label>
-                                    <input name="stfHireData" type="email" class="form-control" id="" placeholder="Phone Number">
-                                </div>
-                                <div class="mb-3 col-sm-12">
-                                    <label for="" class="form-label">Phone Number</label>
+                               <div class="row">
+                                <div class="mb-3 col-sm-6">
+                                    <label for="" class="form-label" style="color:#00FA9A;"> <span>Phone Number*</span> </label>
                                     <input name="stfPhone" type="email" class="form-control" id="" placeholder="Phone Number">
                                 </div>
-                                <div class="mb-3 col-sm-12">
-                                    <label for="" class="form-label">Email</label>
-                                    <input name="stfEmail" type="email" class="form-control" id="" placeholder="Phone Number">
+                                <div class="mb-3 col-sm-6">
+                                    <label for="" class="form-label" style="color:#00FA9A;"> <span>Email*</span> </label>
+                                    <input name="stfEmail" type="email" class="form-control" id="" placeholder="Email">
                                 </div>
+                               </div>
                                 <div class="mb-3 col-sm-12">
-                                    <label for="" class="form-label">Address</label>
+                                    <label for="" class="form-label" style="color:#00FA9A;"> <span>Address*</span> </label>
                                     <!-- <input type="email" class="form-control" id="" placeholder="Address"> -->
                                     <textarea name="stfAddress" id="" cols="30" rows="3" class="form-control" placeholder="Address"></textarea>
                                 </div>
@@ -116,10 +123,10 @@
                             </form>
                         </div>
                         <!-- <div class="modal-body">
-                        Show a second modal and hide this one with the button below.
+                            Show a second modal and hide this one with the button below.
                         </div>
                         <div class="modal-footer">
-                        <button class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Open second modal</button>
+                            <button class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Open second modal</button>
                         </div> -->
                     </div>
                 </div>
