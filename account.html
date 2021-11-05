@@ -41,29 +41,18 @@
                 <table class="table">
                     <thead class="bg-info">
                     <tr>
+                        <th scope="col">No</th>
                         <th scope="col">ID</th>
                         <th scope="col">ID Staff</th>
                         <th scope="col">Username</th>
                         <th scope="col">Role</th>
                         <th scope="col">Password</th>
                         <th scope="col">Status</th>
-                        <th scope="col">action</th>
+                        <th scope="col">Action</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
-                        <th scope="row">1</th>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                        <td>@mdo</td>
-                        <td>@mdo</td>
-                        <td>@mdo</td>
-                        <td>
-                        <button  class="mx-1 px-1 py-0 btn btn-sm btn-outline-danger p-2">
-                            <i class="icon-trash"></i>
-                        </button>
-                        <a class="btn btn-primary" data-bs-toggle="modal" href="#exampleModalToggledit" role="button"><i class="fas fa-ad"></i></a>
-                        </td>
                     </tr>
                     </tbody>
                 </table>
@@ -73,11 +62,11 @@
             <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
                 <div class="modal-dialog" style="background-color: rgba(0, 255, 255, 0.651); padding: 5px; border-radius: 5px;">
                     <div class="modal-content col-sm-12">
-                        <div style="background-color:darkgrey;   border-bottom: 3px solid lightslategray;">
+                        <div style="background-color:darkgrey; border-bottom: 3px solid lightslategray;">
                             <center><h1 style="color: coral; font-size: 25px;"> <b> Account</b></h1></center> 
                           </div>
                         <div class="modal-header">
-                            <form name="account" class="col-sm-12 m-auto ">
+                            <form name="accountfm" class="col-sm-12 m-auto ">
                                 <h1>Account</h1>
                                 <div class="mb-3 col-sm-12">
                                 <input type="hidden" name="id">

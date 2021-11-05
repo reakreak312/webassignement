@@ -76,22 +76,24 @@
                       </div>
                       <div class="modal-header">
                         <div class="col-sm-12 m-auto ">
-                          <form name="Category">
+                          <form name="categoryfm">
+                            <input type="hidden" name="id">
                             <div class="mb-3 col-sm-12">
-                              <label for="exampleFormControlInput1" class="form-label" style="color:#00FA9A;">Name</label>
-                              <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Name">
+                              <label for="" class="form-label" style="color:#00FA9A;">Name</label>
+                              <input name="catName" type="text" class="form-control" id="" placeholder="Name">
                             </div>
                             <div class="mb-3 col-sm-12">
-                              <label for="exampleFormControlInput1" class="form-label" style="color:#00FA9A;">Status</label>
-                              <select class="form-select" aria-label="Default select example">
-                                <option selected>Select</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
+                              <label for="" class="form-label" style="color:#00FA9A;">Status</label>
+                              <select name="catStatus" class="form-select" aria-label="Default select example">
+                                <option selected>--None--</option>
+                                <option value="Active">Active</option>
+                                <option value="InActive">InActive</option>
                               </select>
                             </div>
-                            <div class=" ">
-                              <a href="Categery.html"><button type="button" class="btn btn-danger ">Cancel</button></a>
-                              <button type="button" onclick="addcategery()" class="btn btn-success ">Save</button>
+                            <div class="">
+                              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                                <a id="doAddBtn" style="margin-left:10px;" class="btn btn-primary" href="#" role="button"
+                                onclick="doAdd(event);">Add</a>
                             </div>
                           </form>
                         </div>
