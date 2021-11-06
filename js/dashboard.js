@@ -1,6 +1,6 @@
 var defaultUser = {
   storageKey: 'login>index.html'
-  ,email : 'admin@yahoo.com'
+  ,email : 'admin@'
   ,password : '123'
 };
 
@@ -144,7 +144,8 @@ function preloadOption() {
   if(activeMenu.pageURL=='account.html') loadOption('accStaffId','Staffs','id','stfNameEN');
   if(activeMenu.pageURL=='Xproduct.html') {
     loadOption('proCategory','Categorys','id','catName');
-    loadOption('proAccount','Accounts','id','accStaffId');
+    // loadOption('proAccount','Accounts','id','accStaffId');
+    document[activeMenu.formName]['proAccount'].value = defaultUser.email;
   }
 }
 
@@ -467,6 +468,7 @@ function showToast(status,message,param) {
 
 function doLogin() {
   var user = retrieveFromStorage(defaultUser.storageKey);
+  if(user==undefined||user==null) navigateTo('index.html');
   var df = document.loginfm,next=false;
   let usern = df.email.value, pass = df.password.value;
   if(usern==''||pass=='') return showToast('warning','username, password can\'t be blank.');
