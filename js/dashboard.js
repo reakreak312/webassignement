@@ -162,7 +162,7 @@ function cacheMenuText() {
     if (Object.hasOwnProperty.call(mapMenu, nm)) {
       var menu = mapMenu[nm];
       var li = 
-      '<li class="nav-item white-hover" style="font-size: 15px;">'
+      '<li class="nav-item white-hover" style="font-size: 16px;">'
       +  '<a id="Dashboard" class="nav-link '+(menu.isActive?'active':'')+'" aria-current="page" href="'+menu.pageURL+'">'
       +    '<i class="'+menu.icon+'"></i>\n'
       +     nm
@@ -272,16 +272,18 @@ function doAdd(evt) {
     }
     const max=9999,min=1000;
     let f = validProduct(rec);
-    if(f!=null) return alert('please fill the value of ['+f+']');
+    if(f!=null) return showToast('warning','please fill the value of ['+f+']',{duration: 5000});
     if(act=='Add') {
       rec['id'] = activeMenu.prefixKey+Math.floor(Math.random() * (max - min + 1) + min);
       activeMenu.data.unshift(rec);
+      showToast('success','record create sucess.');
     }
     else {
       updateRecord(rec);
+      showToast('success','record updated sucess.');
     }
     // console.log(rec);
-  
+    
   laodData();
 }
 
@@ -325,7 +327,7 @@ function doRemoveRecord(proId) {
       if (confirm('are you sure want to remove this record?')) {
         activeMenu.data.splice(ix, 1);
         laodData();
-        // showToast('record remove success!');
+        showToast('success','record remove success!');
       }
     }
   }
@@ -353,7 +355,8 @@ function doEditRecord(proId) {
 function doSave() {
   if(confirm('save to local storage?')){
     save2Storage(activeMenu.storageKey,activeMenu.data);
-    location.reload();
+    //location.reload();
+    showToast('success','data saved to local storage sucess.',{duration: 5000});
   }
 }
 
@@ -432,27 +435,21 @@ function loadOption(element,relateToKey,value,label) {
   }
 }
 
-function showToast(message) {
-  document.getElementById('toastBody').innerHTML='<b>'+message+'</b>';
-  var toastElList = [].slice.call(document.querySelectorAll('.toast'))
-  var toastList = toastElList.map(function(toastEl) {
-    return new bootstrap.Toast(toastEl)
-  })
-  toastList.forEach(toast => toast.show()) 
+function showToast(status,message,param) {
+  const stt = status.toLowerCase();
+  // console.log(tata);
+  if(param==undefined || !param instanceof Object) param={};
+  switch (stt) {
+    case 'log': tata.log(status.toUpperCase(),message,param);break;
+    case 'info': tata.info(status.toUpperCase(),message,param);break;
+    case 'success': tata.success(status.toUpperCase(),message,param);break;
+    case 'warning': tata.warn(status.toUpperCase(),message,param);break;
+    case 'error': tata.error(status.toUpperCase(),message,param);break;
+    default: tata.text(status.toUpperCase(),message,param); break;
+  }
 }
 //End Products Page ==========
 
-function getToast() {
-  return '<div class="toast top-0 start-50 translate-middle-x" role="alert" aria-live="assertive" aria-atomic="true" autohide="true">'
-  +    '<div class="toast-header">'
-  +      '<strong class="me-auto">Message</strong>'
-  +      '<button type="button" class="btn-close" data-bs-dismiss="toast"></button>'
-  +    '</div>'
-  +    '<div class="toast-body" id="toastBody">'
-  +      '<p>Some text inside the toast body</p>'
-  +    '</div>'
-  +  '</div>';
-}
 //@dasboard fix page
 
 function getDasboardTemplete(menuLi) {
@@ -463,15 +460,13 @@ function getDasboardTemplete(menuLi) {
   +  '<button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">'
   +    '<span class="navbar-toggler-icon"></span>'
   +  '</button>'
-  +  '<input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">'
+  // +  '<input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">'
   +  '<div class="navbar-nav">'
   +    '<div class="nav-item text-nowrap">'
   +      '<a class="nav-link px-3" href="#" onclick="doSingOut();">Sign out</a>'
   +    '</div>'
   +  '</div>'
   +'</header>'
-  // sadasdasd
-  // +getToast()
   +'<div class="container-fluid">'
   +  '<div class="row" id="toprow">'
   +    '<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse" style="border: 5px solid #191c1f;">'

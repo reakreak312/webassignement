@@ -116,10 +116,18 @@ body {
 .gray-hover:hover{
   background-color: rgba(194, 194, 194, 0.5);
 }
-.white-hover:hover,.active{
-  background-color: #000000;
+
+li a:hover,.active{
   color: #fff !important;
+  background-color: #000000;
 }
 .dataTables_filter{
   float: right;
+}
+.table {
+  background: rgb(248, 247, 247);
+}
+.table tbody tr:hover{
+  cursor: pointer;
+  background-color: rgb(219, 223, 214);
 }
