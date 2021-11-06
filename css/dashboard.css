@@ -120,3 +120,6 @@ body {
   background-color: #000000;
   color: #fff !important;
 }
+.dataTables_filter{
+  float: right;
+}
