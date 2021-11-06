@@ -1,8 +1,18 @@
+var defaultUser = {
+  storageKey: 'login>index.html'
+  ,email : 'admin@yahoo.com'
+  ,password : '123'
+};
+
+function crateDefaultUser() {//isLog
+  const ux = retrieveFromStorage(defaultUser.storageKey);
+  if(ux==undefined||ux==null) save2Storage(defaultUser.storageKey,defaultUser);
+  else defaultUser = ux;
+}
+
 //menu must setup in here
-//@each menu must the same structure
 //@add @remove @update @save @rendertable @clear @loadmenu 
 //all this function using the same logic for each menu page
-//@html file should be the same structure
 var mapMenu = {
   'Dasboard':{
     pageURL:'dasboard.html'
@@ -142,6 +152,8 @@ function preloadOption() {
 init();
 
 function init() {
+  crateDefaultUser();
+  if(!defaultUser.isLog) return getFileFromBaseURL()=='index.html'? "" :navigateTo('index.html');
   cacheMenuText();
   loadDataOfMenu();
   //re-use code, but don't need templete
@@ -175,11 +187,15 @@ function cacheMenuText() {
   mapMenu['allli']=alLi;
 }
 
-function setActivePage() {
-  let act=null;
+function getFileFromBaseURL() {
   let baseURL = window.location.href;
   let path = baseURL.split('/');
-  let fileName = path[path.length-1];
+  return path[path.length-1];
+}
+
+function setActivePage() {
+  let act=null;
+  let fileName = getFileFromBaseURL();
   for (const nm in mapMenu) {
     if (Object.hasOwnProperty.call(mapMenu,nm)) {
       if (fileName.startsWith(mapMenu[nm].pageURL)) {
@@ -448,6 +464,20 @@ function showToast(status,message,param) {
     default: tata.text(status.toUpperCase(),message,param); break;
   }
 }
+
+function doLogin() {
+  var user = retrieveFromStorage(defaultUser.storageKey);
+  var df = document.loginfm,next=false;
+  let usern = df.email.value, pass = df.password.value;
+  if(usern==''||pass=='') return showToast('warning','username, password can\'t be blank.');
+  else if(usern==user.email && pass==user.password) next = true;
+  else return showToast('error','incorrect username or password.\nDefault[\nusername='+user.email+', password='+user.password+'].',{duration: 5000});
+  if(next){
+    user.isLog=true;
+    save2Storage(user.storageKey,user);
+    navigateTo('dasboard.html');
+  }
+}
 //End Products Page ==========
 
 //@dasboard fix page
@@ -486,6 +516,12 @@ function getDasboardTemplete(menuLi) {
   +              '<span data-feather="file-text"></span>'
   +              'Current month'
   +            '</a>'
+  +          '</li>'
+  +          '<li class="nav-item">'
+  +            '<b class="nav-link" href="#">'
+  +              '<span data-feather="file-text"></span>'
+  +               defaultUser.email
+  +            '</b>'
   +          '</li>'
   +        '</ul>'
   +      '</div>'
