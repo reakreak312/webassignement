@@ -3,6 +3,7 @@
 # Topic: Inventory Managerment System
 
 # Team member:
+#   Huy Phollin 
 #   Sroy Thol 
 #   Soue Sovannkiry
 #   Sorn Nantib sornnantib2@gmail.com
