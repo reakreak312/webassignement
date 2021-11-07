@@ -33,31 +33,19 @@
                         <a style="margin-left:10px;" class="btn btn-success" href="#" role="button"
                         onclick="doSave();">Save</a>
                     </div>
-                    <table class="table">
+                    <table id="table" class="table">
                         <thead class="bg-info">
                           <tr>
+                            <th scope="col">No</th>
                             <th scope="col">Id</th>
                             <th scope="col">Full Name</th>
                             <th scope="col">Gender</th>
                             <th scope="col">Phone</th>
                             <th scope="col">Address</th>
-                            <th scope="col">action</th>
+                            <th scope="col">Action</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td>@mdo</td>
-                            <td>
-                                <button  class="mx-1 px-1 py-0 btn btn-sm btn-outline-danger p-2">
-                                  <i class="icon-trash">
-                                </button>
-                                <a class="btn btn-primary" data-bs-toggle="modal" href="#exampleModalToggleedit" role="button"><i class="far fa-edit"></i></a>
-                            </td>
-                          </tr>
                         </tbody>
                     </table>
                 </div>
@@ -70,7 +58,7 @@
                     <center><h1 style="color: coral; font-size: 25px;"><b>Customer</b></h1></center> 
                 </div>
                   <div class="modal-header">
-                      <form name="customer" class="col-sm-12 m-auto ">
+                      <form name="customerfm" class="col-sm-12 m-auto ">
                           <input type="hidden" name="id">
                           <div class="mb-3 col-sm-12">
                               <label for="" class="form-label" style="color:#00FA9A;"> <span>Name*</span> </label>
@@ -79,10 +67,14 @@
                           <div class="mb-3 col-sm-12">
                             <label for="" class="form-label" style="color:#00FA9A;"> <span>Gender*</span> </label>
                             <br>
-                            <label for="male">Male</label>
+                            <!-- <label for="male">Male</label>
                             <input type="radio" name="gender" id="male" value="male" checked>
                             <label for="female">Female</label>
-                            <input type="radio" name="gender" id="female" value="female">
+                            <input type="radio" name="gender" id="female" value="female"> -->
+                            <select name="cusGender" class="form-select">
+                              <option value="Male">Male</option>
+                              <option value="Female">Female</option>
+                            </select>
                         </div>
                           <div class="mb-3 col-sm-12">
                               <label for="" class="form-label" style="color:#00FA9A;"> <span>Phone Number*</span> </label>
@@ -93,8 +85,8 @@
                               <!-- <input name="cusAddress" type="text" class="form-control" id="" placeholder="Address"> -->
                               <textarea name="cusAddress" id="" cols="30" rows="5" class="form-control" placeholder="Address"></textarea>
                           </div>
-                          <div class=" ">
-                              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                          <div class="">
+                            <button id="cancel" type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
                               <a id="doAddBtn" style="margin-left:10px;" class="btn btn-primary" href="#" role="button"
                               onclick="doAdd(event);">Add</a>
                           </div>
@@ -117,13 +109,5 @@
     <script src="js/tata.js"></script>
     <!-- Custom js -->
     <script src="js/dashboard.js"></script>
-    <!-- jQuery Embeded -->
-    <script>
-        // JQuery
-        $(document).ready(function() {
-            console.log('$(document).ready(function() {}');
-            $('.table').DataTable();
-        });
-    </script>
     
 </html>

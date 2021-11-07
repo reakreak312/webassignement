@@ -1,14 +1,25 @@
+// <!-- ==================== -->
+// <!--    By @Ren Vireak    -->
+// <!-- ==================== -->
+
+// data table jQuery
+$(document).ready(function() {
+  console.log('$(document).ready(function() {}');
+  $('#table').DataTable({
+      // ordering: true
+  });
+});
+
 var defaultUser = {
   storageKey: 'login>index.html'
   ,email : 'admin@'
   ,password : '123'
 };
 
-function crateDefaultUser() {//isLog
-  const ux = retrieveFromStorage(defaultUser.storageKey);
-  if(ux==undefined||ux==null) save2Storage(defaultUser.storageKey,defaultUser);
-  else defaultUser = ux;
-}
+//@key of all function, can't not null/undefined
+var activeMenu = null;
+var items = {}//proId:data;
+var dasboardObj= ['Customers','Staffs','Accounts','Products','Suppliers','Orders'];
 
 //menu must setup in here
 //@add @remove @update @save @rendertable @clear @loadmenu 
@@ -121,33 +132,36 @@ var mapMenu = {
     ,isOverrideForm:true
     ,addNewFormId:'addNewModel'
   }
-  ,'Orders':{
+  ,'Sale Orders':{
     pageURL:'order.html'
     ,icon:'fas fa-home fa-lg'
     ,isActive:false
-    ,fields : []
-    ,storageKey:''
+    ,fields : ['id','ordCustomerId','ordDate','ordCreatedBy','ordProductId','ordProductName','ordDate']
+    ,itemFields : ['ordProductId','ordQty','ordProductName','ordCategory','ordPrice','ordAmount']
+    ,storageKey:'order.html'
     ,data : []
-    ,formName:''
-    ,prefixKey:''
-    ,isOverrideFun:true
+    ,formName:'itemfm'
+    ,notRequired:['id']
+    ,prefixKey:'ORD'
+    ,isOverrideFun:false
+    ,isOverrideForm:false
+    // ,addNewFormId:'addNewModel'
+  }
+  ,'Invoice':{
+    pageURL:'invoice.html'
+    ,icon:'fas fa-file-invoice-dollar fa-lg'
+    ,isActive:false
+    ,fields : ['id','invCreatedBy','invCustomerName','invSaleData','invDiscount','invTotal','invReccive','invReturn','invPaymentSatus','invType','invInreccive','invDescription']
+    ,storageKey:'order.html'
+    ,data : []
+    ,formName:'itemfm'
+    ,notRequired:['id']
+    ,prefixKey:'ORD'
+    ,isOverrideFun:false
+    ,isOverrideForm:false
+    // ,addNewFormId:'addNewModel'
   }
 };
-
-//@key of all function, can't not null/undefined
-var activeMenu = null;
-var dasboardObj= ['Customers','Staffs','Accounts','Products','Suppliers','Orders'];
-
-//form option relationship
-function preloadOption() {
-   //form: any, element: any, relateToKey: any, value: any, label: any)
-  if(activeMenu.pageURL=='account.html') loadOption('accStaffId','Staffs','id','stfNameEN');
-  if(activeMenu.pageURL=='Xproduct.html') {
-    loadOption('proCategory','Categorys','id','catName');
-    // loadOption('proAccount','Accounts','id','accStaffId');
-    document[activeMenu.formName]['proAccount'].value = defaultUser.email;
-  }
-}
 
 //@menu render
 init();
@@ -165,6 +179,247 @@ function init() {
   mainp.className = 'col-md-9 ms-sm-auto col-lg-10 px-md-4';
   domDsb.append(mainp);
   if(!activeMenu.isOverrideFun) preloadOption();
+}
+
+function crateDefaultUser() {//isLog
+  const ux = retrieveFromStorage(defaultUser.storageKey);
+  if(ux==undefined||ux==null) save2Storage(defaultUser.storageKey,defaultUser);
+  else defaultUser = ux;
+}
+//form option relationship
+function preloadOption() {
+   //form: any, element: any, relateToKey: any, value: any, label: any)
+  if(activeMenu.pageURL=='account.html') loadOption('accStaffId','Staffs','id','stfNameEN');
+  if(activeMenu.pageURL=='Xproduct.html') {
+    loadOption('proCategory','Categorys','id','catName');
+    loadOption('proAccount','Accounts','id','accStaffId');
+    setInitValue('proAccount',activeMenu.formName,defaultUser.email);
+  }
+  if(activeMenu.pageURL=='order.html') {
+    // loadOption('ordProductId','Products','id','proName');
+    loadOption('ordCustomerId','Customers','id','cusFullName');
+    setInitValue('ordDate','itemfm',new Date().toJSON().slice(0, 10));
+    setInitValue('ordCreatedBy','itemfm',defaultUser.email);
+    let pros = document.getElementById('productSelect');
+    pros.innerHTML=getItems();
+  }
+}
+
+function getItems() {
+  const listPro = retrieveFromStorage(mapMenu['Products'].storageKey);
+  // console.log(listPro);
+  let rex = '';
+  if(listPro!=undefined){
+    for (let index = 0; index <listPro.length; index++) rex += itemsDiv(listPro[index]);
+  }
+  return rex;
+}
+
+function itemsDiv(pro) {
+  return ''
+  +'<div onclick="doAddItem(\''+pro['id']+'\');" class="col-sm-4 m-2 item_type" style="cursor:pointer;background-color:rgb(255, 102, 0);">' 
+  +    '<h5><i class="fas fa-cart-arrow-down"></i>'+pro['proName']+'</h5>'
+  +    '<h5><i class="fas fa-barcode"></i>000005</h5>'
+  +    '<h5><i class="fas fa-money-check-alt"></i> $'+pro['proPrice']+' </h5>'
+  +'</div>';
+}
+
+function doAddItem(proId) {
+  // console.log('doAddItem?',proId);
+  let doc = document['itemfm'];
+  let pro = getRecord('Products',proId);
+  if(pro==undefined||pro==null) return showToast('error','invalid product.');
+  let item = {};
+  item['qty'] = parseInt(doc['ordQty'].value);
+  item['price'] = pro['proPrice'];
+  item['itmProductId'] = pro['id'];
+  item['product'] = pro;
+  //exist ?? alredy added
+  if(items[item['itmProductId']]!=undefined){
+    items[item['itmProductId']]['qty']+=parseInt(item['qty']);
+    items[item['itmProductId']]['itmAmount']=calAmount(items[item['itmProductId']]['qty'],item['price']);
+  }
+  else {
+    //new item
+    item['itmAmount'] = calAmount(item['qty'],item['price']);
+    items[pro['id']]=item;
+  }
+  // console.log(item);
+  // console.log(items);
+  loadItems();
+}
+
+function calAmount(qty,price) {
+  let res = parseInt(qty) * parseFloat(price);
+  res = foat2digit(res);
+  return isNaN(res) ? 0 : res;
+}
+
+function foat2digit(ftValue) {
+  return Math.round(ftValue*100)/100;
+}
+
+function setInitValue(element,form,value) {
+  document[form][element].value = value;
+}
+
+function moneyExchange(value,type) {
+  let oneDulla = 4000; //1$=4100r
+  if(type.toUpperCase()=='KH') return parseFloat(value) / oneDulla; //to dolla
+  // type.toUpperCase=='USD'
+  else return parseFloat(value) * oneDulla; //to real
+}
+
+function commaMoneyKhmer(value) {
+  return value;
+  // incorrect logic
+  let str = ''+value;
+  str = str.split("").reverse().join("");
+  return str.match(/.{1,3}/g).reverse().join(",");
+}
+
+function doExchangeReturn(event) {
+  let cur = event.target.name;
+  if(cur.startsWith('ordKHReceived')) document['itemfm']['ordUSDReceived'].value=0;
+  else if(cur.startsWith('ordUSDReceived')) document['itemfm']['ordKHReceived'].value=0;
+  loadItems();
+}
+
+function createOrderRecord(rec) {
+  let res = {}
+  console.log(rec);
+  console.log(items);
+  res['id'] = rec['id'];
+  res['invCreatedBy'] = rec['ordCreatedBy'];
+  res['invCustomerName'] = rec['ordCustomerId'];
+  res['invSaleData'] = rec['ordDate'];
+  res['invDiscount'] = '';
+  res['invTotal'] = parseFloat(items['payment']['ChangReturn']);
+  res['invReccive'] = parseFloat(items['payment']['ReceivedAmount']);
+  res['invReturn'] = parseFloat(items['payment']['RemainAmount']);
+  res['invPaymentSatus'] = items['payment']['completePay']==true?'Complete':'InComplete';
+  res['invType'] = items['payment']['Type'];
+  res['invInreccive'] = items['payment']['completePay']!=true?items['payment']['RemainAmount']:0;
+  res['invDescription'] = '';
+  res['items'] = items;
+  return res;
+}
+
+function updateChangReturn() {
+  let doc = document['itemfm'];
+  let types = [];
+  if(doc['ordKHReceived'].value!=''&&doc['ordKHReceived'].value!=0) types.push('KH');
+  if(doc['ordUSDReceived'].value!=''&&doc['ordUSDReceived'].value!=0) types.push('USD');
+  items['payment'] = {};
+  if(types.length==0) types.push('USD');
+  for (let x = 0; x < types.length; x++) {
+    const type = types[x];
+    let value = doc['ord'+type+'Received'].value;
+    let total = foat2digit(type.toUpperCase()=='KH'?moneyExchange(getTotalCurrentOrder(),'USD'):getTotalCurrentOrder());
+    // console.log('total ?'+total);
+    var typ = {}, remain = value-total>=0?foat2digit(value-total):total-value;
+    typ['Type'] = type;
+    typ['ReceivedAmount'] = value;
+    typ['ChangReturn'] = total;
+    typ['RemainAmount'] = remain;
+    typ['completePay'] = value-total>=0;
+    items['payment'] = typ 
+    document.getElementById(type+'ReceivedAmount').innerHTML=value;
+    document.getElementById(type+'ChangReturn').innerHTML=total;
+    document.getElementById(type+'RemainAmount').innerHTML=typ['completePay']?remain:'not enought['+remain+']';
+  }
+}
+
+function getTotalCurrentOrder() {
+  // console.log(items);
+  let x = 0;
+  for (const key in items) {
+    let rec = items[key];
+    // console.log(rec);
+    if (Object.hasOwnProperty.call(rec, 'itmAmount')) {
+      x += parseFloat(rec['itmAmount']);
+    }
+  }
+  return x;
+}
+
+function loadItems(){
+  var ix=0, tbdy = document.getElementById('itemTblbody');
+  tbdy.innerHTML='';
+  let total = 0;
+  // console.log(items);
+  for (let k in items) {
+    if(k=='payment') continue;
+    const itm = items[k];
+    // console.log(itm);
+    total += parseFloat(itm['itmAmount']);
+    let tr = document.createElement('tr');
+    let atd='';ix++;
+    atd+='<td scope="row">'+(parseInt(ix))+'</td>'
+    +'<td>'+itm['product']['id']+'</td>'
+    +'<td>'+itm['product']['proName']+'</td>'
+    +'<td>'+itm['qty']+'</td>'
+    +'<td> $'+itm['product']['proPrice']+' </td>'
+    +'<td> $'+itm['itmAmount']+' </td>'
+    // +'<td><a class="btn btn-primary col-sm-6"><i class="fas fa-minus-circle"></i></a></td>';
+    +'<td><a onclick="doRemoveItem(\''+itm['product']['id']+'\');" class="mx-1 px-1 py-0 btn btn-sm btn-outline-danger p-2">'
+    +'<i class="fas fa-minus-circle"></i>'
+    +'</a></td>';
+    tr.innerHTML = atd;
+    tbdy.prepend(tr);
+  }
+  if(ix>0){
+    let cls = "table-primary";
+    let tr = document.createElement('tr'),tr2 = document.createElement('tr');
+    tr.className=cls;
+    let tds ='<td colspan="5" style="text-align:right;"><b>Total</b></td>'
+    +'<td colspan="2">($)<b id="USDtotal">'+(foat2digit(total))+'</b></td>';
+    tr.innerHTML=tds;
+    tr2.className=cls;
+    tr2.innerHTML = '<td colspan="5"></td>'
+    +'<td colspan="2">(រ)<b id="KHtotal">'+(commaMoneyKhmer(moneyExchange(foat2digit(total),'USD')))+'</b></td>';
+    tbdy.append(tr);
+    tbdy.append(tr2);
+    document.getElementById('USDChangReturn').innerHTML=foat2digit(total);
+    document.getElementById('KHChangReturn').innerHTML=moneyExchange(foat2digit(total),'USD');
+  }
+  updateChangReturn();
+}
+
+function doRemoveItem(itemId) {
+  if(items[itemId]!=undefined) {
+    delete items[itemId];
+    loadItems();
+  }
+}
+
+function doChangeProOrder(event) {
+  let proId = event.target.value;
+  let pro = getRecord('Products',proId);
+  if(pro==null) return;
+  // console.log(pro);
+  let doc = document[activeMenu.formName];
+  if (doc!=undefined) {
+    let cat = getRecord('Categorys',pro['proCategory']);
+    let qty = doc['ordQty'].value;
+    doc['ordProductName'].value = pro['proName'];
+    doc['ordCategory'].value = cat==null?'':cat['catName'];
+    doc['ordPrice'].value = pro['proPrice'];
+  }
+}
+
+function getRecord(objName,recId) {
+  var obj = mapMenu[objName]; 
+  if(obj==undefined||obj==null) return null;
+  let dt = retrieveFromStorage(obj.storageKey);
+  // console.log('getRecord?'+recId+'?',dt);
+  for (const inx in dt) {
+    const rec = dt[inx];
+    if (Object.hasOwnProperty.call(rec,'id')) {
+      if(rec['id']==recId) return rec;
+    }
+  }
+  return null;
 }
 
 function cacheMenuText() {
@@ -237,7 +492,10 @@ function loadDataOfMenu(){
 
 function laodData() {
   // console.log('activeMenu ? ',activeMenu);
-  var tblbody = document.getElementsByTagName('tbody')[0];
+  var tbl = document.getElementById('table');
+  if(!tbl) return;
+  let tblbody = tbl.children[1];
+  // console.log(tblbody);
   let atr ='';
   for (let index = 0; index < activeMenu.data.length; index++) {
     let tr ='<tr>';
@@ -266,7 +524,7 @@ function laodData() {
     tr+=atd+'</tr>';
     atr+=tr;
   }
-  tblbody.innerHTML = atr;
+  if(tblbody!=undefined&&tblbody!=null) tblbody.innerHTML = atr;
 }
 
 function validProduct(object) {
@@ -279,7 +537,7 @@ function validProduct(object) {
 
 function doAdd(evt) {
   var act = evt.target.innerHTML;
-
+  let isOrder = activeMenu.pageURL=='order.html';
     const fields = activeMenu.fields;
     let fdoc = document[activeMenu.formName];
     var rec = {};
@@ -290,29 +548,36 @@ function doAdd(evt) {
     const max=9999,min=1000;
     let f = validProduct(rec);
     if(f!=null) return showToast('warning','please fill the value of ['+f+']',{duration: 5000});
-    if(act=='Add') {
+    if(act=='Add'||isOrder) {
       rec['id'] = activeMenu.prefixKey+Math.floor(Math.random() * (max - min + 1) + min);
+      if(isOrder){
+        rec = createOrderRecord(rec);
+      }
       activeMenu.data.unshift(rec);
-      showToast('success','record create sucess.');
+      showToast('success','record created.');
     }
     else {
       updateRecord(rec);
-      showToast('success','record updated sucess.');
+      showToast('success','record updated.');
     }
-    // console.log(rec);
-    
+    console.log(rec);
+    console.log(activeMenu.data);
+    let btnCancel = document.getElementById('cancel');
+    if(btnCancel!=undefined&&btnCancel!=null) btnCancel.click();
+    // top form
+    if(activeMenu.pageURL=='Xproduct.html') clearProductForm();
+    if(activeMenu.pageURL=='order.html'){}
+    else clearForm();
+    if(isOrder) doSave();
   laodData();
 }
 
-function clearProductForm(params) {
-  let fdoc = document.productfm;
-  for (let i in fields){
-    const x = fields[i];
+function clearProductForm() {
+  let fdoc = document[activeMenu.formName];
+  for (let i in activeMenu.fields){
+    const x = activeMenu.fields[i];
     if(fdoc[x]!=undefined){
-      if (x=='proCategory' || x=='proAccount' || x=='proStatus') {
-        fdoc[x].value='--None--';
-      }
-      else fdoc[x].value='';
+      if (x!='proCategory' && x!='proStatus' && x!='proAccount') fdoc[x].value='';
     }
   }
 }
@@ -322,8 +587,7 @@ function updateRecord(pro) {
     if (activeMenu.data[ix].id==pro.id) activeMenu.data[ix] = pro;
   }
   var btn = document.getElementById('doAddBtn');
-  btn.innerHTML='Add';
-  clearForm();
+  if(btn!=undefined) btn.innerHTML='Add';
 }
 
 function clearForm() {
@@ -344,7 +608,7 @@ function doRemoveRecord(proId) {
       if (confirm('are you sure want to remove this record?')) {
         activeMenu.data.splice(ix, 1);
         laodData();
-        showToast('success','record remove success!');
+        showToast('success','record removed!');
       }
     }
   }
@@ -373,7 +637,7 @@ function doSave() {
   if(confirm('save to local storage?')){
     save2Storage(activeMenu.storageKey,activeMenu.data);
     //location.reload();
-    showToast('success','data saved to local storage sucess.',{duration: 5000});
+    showToast('success','data saved to local storage sucess.');
   }
 }
 
@@ -438,7 +702,7 @@ function loadOption(element,relateToKey,value,label) {
   if (relateToKey!=undefined&&relateToKey!='') {
     let menu = mapMenu[relateToKey];
     if(menu!=undefined){
-      let opts = '';
+      let opts = '<option value="">--None--</option>';
       let data = retrieveFromStorage(menu.storageKey);
       // console.log(data);
       for (const inx in data) {
@@ -455,7 +719,7 @@ function loadOption(element,relateToKey,value,label) {
 function showToast(status,message,param) {
   const stt = status.toLowerCase();
   // console.log(tata);
-  if(param==undefined || !param instanceof Object) param={};
+  if(param==undefined || !param instanceof Object) param={duration: 1000};
   switch (stt) {
     case 'log': tata.log(status.toUpperCase(),message,param);break;
     case 'info': tata.info(status.toUpperCase(),message,param);break;

@@ -131,3 +131,11 @@ li a:hover,.active{
   cursor: pointer;
   background-color: rgb(219, 223, 214);
 }
+.form_border{
+  border:2px solid gray;
+  border-radius: 3px;
+  padding: 10px;
+}
+form h5{
+  font-weight: bold;
+}

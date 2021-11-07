@@ -1,5 +1,5 @@
 <!-- ==================== -->
-<!--       By @reak       -->
+<!--   By @Ren Vireak     -->
 <!-- ==================== -->
 
 <!doctype html>
@@ -40,12 +40,6 @@
                             </div>
                             <div class="mb-3 col-sm-4">
                                 <label for="" class="form-label">Account</label>
-                                <!-- <select name="proAccount" class="form-select" aria-label="">
-                                    <option selected>--None--</option>
-                                    <option value="Sroy Thol">Sroy Thol</option>
-                                    <option value="Sorn Nantib">Sorn Nantib</option>
-                                    <option value="Soue Sovankiry TTR">Soue Sovankiry TTR</option>
-                                </select> -->
                                 <input type="text" class="form-control" name="proAccount" disabled>
                             </div>
                             <div class="mb-3 col-sm-4">
@@ -54,7 +48,7 @@
                             </div>
                             <div class="mb-3 col-sm-4">
                                 <label for="" class="form-label">Price</label>
-                                <input name="proPrice" type="text" class="form-control" id="1">
+                                <input name="proPrice" type="number" class="form-control" id="1">
                             </div>
                             <div class="mb-3 col-sm-4">
                                 <label for="" class="form-label">Thumbnail</label>
@@ -68,7 +62,7 @@
                                     <option value="Deactive">Deactive</option>
                                 </select>
                             </div>
-                            <div class="mb-3 col-sm-12">
+                            <div class="mb-3 col-sm-8">
                                 <label for="" class="form-label">Detail</label>
                                 <textarea name="proDetail" id="" rows="5" class="form-control"></textarea>
                             </div>
@@ -83,7 +77,7 @@
                         onclick="doSave();">Save</a>
                     </div>
                     <br>
-                    <table class="table">
+                    <table id="table" class="table">
                         <thead class="bg-info">
                             <tr>
                                 <th scope="col">No</th>
@@ -100,22 +94,6 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                                <td>@mdo</td>
-                                <td>@mdo</td>
-                                <td>@mdo</td>
-                                <td>@mdo</td>
-                                <td>
-                                    <button  class="mx-1 px-1 py-0 btn btn-sm btn-outline-danger p-2">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                    <a class="mx-1 px-1 py-0 btn btn-sm btn-outline-primary p-2" data-bs-toggle="modal" href="#exampleModalToggledit" role="button">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -134,13 +112,5 @@
     <script src="js/tata.js"></script>
     <!-- Custom js -->
     <script src="js/dashboard.js"></script>
-    <!-- jQuery Embeded -->
-    <script>
-        // JQuery
-        $(document).ready(function() {
-            console.log('$(document).ready(function() {}');
-            $('.table').DataTable();
-        });
-    </script>
     
 </html>

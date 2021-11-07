@@ -33,7 +33,7 @@
                     <a style="margin-left:10px;" class="btn btn-success" href="#" role="button"
                     onclick="doSave();">Save</a>
                 </div>
-                <table class="table">
+                <table id="table" class="table">
                     <thead class="bg-info">
                     <tr>
                         <th scope="col">No</th>
@@ -70,7 +70,8 @@
                                 </div>
                                 <div class="mb-3 col-sm-12">
                                 <label for="" class="form-label" style="color:#00FA9A;"><span>ID Staff*</span></label>
-                                <input name="accStaffId" type="text" class="form-control">
+                                <!-- <input name="accStaffId" type="text" class="form-control"> -->
+                                <select name="accStaffId" class="form-select"></select>
                                 </div>
                                 <div class="mb-3 col-sm-12">
                                 <label for="" class="form-label" style="color:#00FA9A;"><span>Username*</span></label>
@@ -78,10 +79,11 @@
                                 </div>
                                 <div class="mb-3 col-sm-12">
                                 <label for="" class="form-label" style="color:#00FA9A;"><span>Role*</span></label>
-                                <select  name="accRole" class="form-select" aria-label="Default select example">
-                                    <option selected>Select Role</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
+                                <select name="accRole" class="form-select">
+                                    <option >--None--</option>
+                                    <option value="Administrator">Administrator</option>
+                                    <option value="Normal User">Normal User</option>
+                                    <option value="Sale User">Sale User</option>
                                 </select>
                                 </div>
                                 <div class="mb-3 col-sm-12">
@@ -91,14 +93,13 @@
                                 <div class="mb-3 col-sm-12">
                                 <label for="" class="form-label" style="color:#00FA9A;">Status</label>
                                 <select name="accStatus" class="form-select" aria-label="Default select example">
-                                    <option selected>Select</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
+                                    <option value="Active">Active</option>
+                                    option value="InActive">InActive</option>
                                 </select>
                                 </div>
                                 
                                 <div class=" ">
-                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                                <button id="cancel" type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
                                 <a id="doAddBtn" style="margin-left:10px;" class="btn btn-primary" href="#" role="button"
                                 onclick="doAdd(event);">Add</a>
                                 </div>
@@ -126,13 +127,5 @@
     <script src="js/tata.js"></script>
     <!-- Custom js -->
     <script src="js/dashboard.js"></script>
-    <!-- jQuery Embeded -->
-    <script>
-        // JQuery
-        $(document).ready(function() {
-            console.log('$(document).ready(function() {}');
-            $('.table').DataTable();
-        });
-    </script>
     
 </html>

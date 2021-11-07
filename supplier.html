@@ -33,7 +33,7 @@
                         <a style="margin-left:10px;" class="btn btn-success" href="#" role="button"
                         onclick="doSave();">Save</a>
                     </div>
-                    <table class="table">
+                    <table id="table" class="table">
                         <thead class="bg-info">
                           <tr>
                             <th scope="col">No</th>
@@ -47,16 +47,6 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <th scope="row">1</th>
-                            <td>MImama</td>
-                            <td>F</td>
-                            <td>#312</td>
-                            <td>ry@gmail.com</td>
-                            <td>087376736</td>
-                            
-                          </tr>
-                          
                         </tbody>
                     </table>
                 </div>
@@ -102,7 +92,7 @@
                                 </div>
             
                                 <div class=" ">
-                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                                    <button id="cancel" type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
                                     <a id="doAddBtn" style="margin-left:10px;" class="btn btn-primary" href="#" role="button"
                                     onclick="doAdd(event);">Add</a>
                                 </div>
@@ -131,13 +121,5 @@
     <script src="js/tata.js"></script>
     <!-- Custom js -->
     <script src="js/dashboard.js"></script>
-    <!-- jQuery Embeded -->
-    <script>
-        // JQuery
-        $(document).ready(function() {
-            console.log('$(document).ready(function() {}');
-            $('.table').DataTable();
-        });
-    </script>
     
 </html>
