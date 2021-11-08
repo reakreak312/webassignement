@@ -31,22 +31,24 @@
 }
  .item_type{
     float: left;
-    padding: 0px 10px;
-    margin: 5px 2px;
-    height: 150px;
-    width: 150px;
+    padding: 10px;
+    margin: 5px;
+    height: auto;
+    width: 30%;
     border-radius: 10px;
-    /* font-weight:bold; */
+    font-weight:bold;
     /* text-align: center; */
+    border: 2px solid rgb(136, 136, 136);
+    background-color:rgb(212, 212, 212);
 }
 .item_type:hover{
-    border: 2px solid rgb(0, 0, 0) !important;
+    background: rgb(223, 190, 190) !important;
 }
 .item_type h5 {
     margin-top: 0;
     margin-bottom: 0rem;
     color: rgb(117, 93, 93);
-    padding: 10px 2px;
+    padding: 2px;
 }
 .total_amont{
     background-color: sandybrown;

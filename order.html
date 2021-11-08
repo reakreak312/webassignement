@@ -32,10 +32,10 @@
         <form name="itemfm" class="form bg-light">
             <input type="hidden" name="id">
             <div class="row d-flex">
-                <div class="col-sm-5" style="border-radius: 10px;">
+                <div class="col-sm-6" style="border-radius: 10px;">
                     <div class="item-input col-sm-12 m-auto row">
                         <div class="mb-3 col-sm-4 form-group" >
-                            <label for="search" class="form-label">Barcode</label>
+                            <label for="search" class="form-label">Barcode (search)</label>
                             <input type="" class="form-control">
                         </div>
                         <div class="mb-3 col-sm-4 form-group">
@@ -48,6 +48,9 @@
                         </div>
                         <div class="mb-3 col-sm-4 form-group">
                             <label class="form-label">Customer</label>
+                            <a style="margin-left:10px;" class="btn btn-primary btn-sm p-0" href="customer.html" role="button">
+                                New Customer
+                            </a>
                             <select name="ordCustomerId" class="form-select"></select>
                         </div>
                         <div class="mb-3 col-sm-4 form-group" >
@@ -57,24 +60,26 @@
                     </div>
                     <br>
                     <!-- item -->
-                    <div class="row p-3" id="productSelect"></div>
+                    <div class="row p-3" id="productSelect" style="overflow:scroll;height:500px;"></div>
                 </div>
-                <div class="mb-3 col-sm-7" style="border-radius: 10px;">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">No</th>
-                                <th scope="col">ProID</th>
-                                <th scope="col">Product</th>
-                                <th scope="col">Qty</th>
-                                <th scope="col">Price</th>
-                                <th scope="col">Amount</th>
-                                <th scope="col">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="itemTblbody">
-                        </tbody>
-                    </table>
+                <div class="col-sm-6 mb-3" style="border-radius: 10px;">
+                    <div style="overflow:scroll;height:300px;">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">No</th>
+                                    <th scope="col">ProID</th>
+                                    <th scope="col">Product</th>
+                                    <th scope="col">Qty</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Amount</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="itemTblbody">
+                            </tbody>
+                        </table>
+                    </div>
                     <br>
                     <div class="input_pay">
                         <div class="input-group mb-3">
@@ -88,7 +93,7 @@
                             <thead>
                                 <tr>
                                     <th scope="col">Amount Received(រ)</th>
-                                    <th scope="col">Chang Return(រ)</th>
+                                    <th scope="col">Change Return(រ)</th>
                                     <th scope="col">Remain Amount(រ)</th>
                                 </tr>
                             </thead>
@@ -111,7 +116,7 @@
                                 <thead>
                                 <tr>
                                     <th scope="col">Amount Received($)</th>
-                                    <th scope="col">Chang Return($)</th>
+                                    <th scope="col">Change Return($)</th>
                                     <th scope="col">Remain Amount($)</th>
                                 </tr>
                                 </thead>

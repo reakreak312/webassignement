@@ -39,8 +39,9 @@
                                 <th scope="col">No</th>
                                 <th scope="col">ID</th>
                                 <th scope="col">Product ID</th>
-                                <th scope="col">Product Name</th>
-                                <th scope="col">Category</th>
+                                <!-- <th scope="col">Product Name</th> -->
+                                <th scope="col">Supplier</th>
+                                <th scope="col">Quantity</th>
                                 <th scope="col">Import By</th>
                                 <th scope="col">Import Date</th>
                                 <th scope="col">Expire Date</th>
@@ -64,40 +65,41 @@
                                 <h1>Stock</h1>
                                 <input type="hidden" name="id">
                                 <div class="mb-3 col-sm-12">
-                                    <label for="" class="form-label">Product ID</label>
-                                    <input name="stkProductId" type="number" class="form-control" id="">
+                                    <label for="" class="form-label">Product</label>
+                                    <a style="margin-left:10px;" class="btn btn-primary btn-sm p-0" href="Xproduct.html" role="button">
+                                        New Product
+                                    </a>
+                                    <select name="stkProductId" class="form-select"></select>
                                 </div>
-                                <div class="mb-3 col-sm-12">
+                                <!-- <div class="mb-3 col-sm-12">
                                     <label for="" class="form-label">Product Name</label>
                                     <input name="stkProductName" type="text" class="form-control" id="">
+                                </div> -->
+                                <div class="mb-3 col-sm-12">
+                                    <label for="" class="form-label">Supplier</label>
+                                    <select name="stkSupplier" class="form-select"></select>
                                 </div>
                                 <div class="mb-3 col-sm-12">
-                                    <label for="" class="form-label">Category</label>
-                                    <!-- <input name="" type="text" class="form-control" id="" placeholder="Ex.Food"> -->
-                                    <select name="stkCategory" class="form-select" aria-label="Default select example">
-                                        <option selected>--None--</option>
-                                        <option value="Food">Food</option>
-                                        <option value="Drink">Drink</option>
-                                        <option value="Accessories">Accessories</option>
-                                    </select>
+                                    <label for="" class="form-label">Quantity</label>
+                                    <input name="stkQty" value="1" type="number" class="form-control">
                                 </div>
                                 <div class="mb-3 col-sm-12">
                                     <label for="" class="form-label">Export BY</label>
-                                    <input name="stkExpotBy" type="Text" class="form-control" id="">
+                                    <input name="stkExpotBy" type="Text" class="form-control" disabled>
                                 </div>
                     
                                 <div class="mb-3 col-sm-12">
                                     <label for="" class="form-label">Export Date</label>
-                                    <input name="stkExportData" type="date" class="form-control" id="" placeholder="Phone Number">
+                                    <input name="stkExportData" type="date" class="form-control" placeholder="Phone Number">
                                 </div>
                     
                                 <div class="mb-3 col-sm-12">
                                     <label for="" class="form-label">Exprie  Date</label>
-                                    <input name="stkExpiredDate" type="date" class="form-control" id="" placeholder="Phone Number">
+                                    <input name="stkExpiredDate" type="date" class="form-control" placeholder="Phone Number">
                                 </div>
                     
                                 <div class=" ">
-                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                                    <button id="cancel" type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
                                     <a id="doAddBtn" style="margin-left:10px;" class="btn btn-primary" href="#" role="button"
                                     onclick="doAdd(event);">Add</a>
                                 </div>

@@ -17,9 +17,9 @@ var defaultUser = {
 };
 
 //@key of all function, can't not null/undefined
-var activeMenu = null;
+var activeMenu = null, temp=null;;
 var items = {}//proId:data;
-var dasboardObj= ['Customers','Staffs','Accounts','Products','Suppliers','Orders'];
+var dasboardObj= ['Customers','Staffs','Accounts','Products','Suppliers','Orders','Invoices'];
 
 //menu must setup in here
 //@add @remove @update @save @rendertable @clear @loadmenu 
@@ -122,7 +122,7 @@ var mapMenu = {
     pageURL:'stock.html'
     ,icon:'fas fa-store fa-lg'
     ,isActive:false
-    ,fields : ['id','stkProductId','stkProductName','stkCategory','stkExpotBy','stkExportData','stkExpiredDate']
+    ,fields : ['id','stkProductId','stkSupplier','stkQty','stkExpotBy','stkExportData','stkExpiredDate']
     ,storageKey:'stock.html'
     ,data : []
     ,formName:'stockfm'
@@ -147,11 +147,11 @@ var mapMenu = {
     ,isOverrideForm:false
     // ,addNewFormId:'addNewModel'
   }
-  ,'Invoice':{
+  ,'Invoices':{
     pageURL:'invoice.html'
     ,icon:'fas fa-file-invoice-dollar fa-lg'
     ,isActive:false
-    ,fields : ['id','invCreatedBy','invCustomerName','invSaleData','invDiscount','invTotal','invReccive','invReturn','invPaymentSatus','invType','invInreccive','invDescription']
+    ,fields : ['id','invCreatedBy','invCustomerName','invSaleData','invTotal','invDiscount','invReccive','invReturn','invPaymentSatus','invType','invInreccive','invDescription']
     ,storageKey:'order.html'
     ,data : []
     ,formName:'itemfm'
@@ -162,7 +162,7 @@ var mapMenu = {
     // ,addNewFormId:'addNewModel'
   }
 };
-
+console.log(mapMenu);
 //@menu render
 init();
 
@@ -188,44 +188,73 @@ function crateDefaultUser() {//isLog
 }
 //form option relationship
 function preloadOption() {
+  const url = activeMenu.pageURL;
    //form: any, element: any, relateToKey: any, value: any, label: any)
-  if(activeMenu.pageURL=='account.html') loadOption('accStaffId','Staffs','id','stfNameEN');
-  if(activeMenu.pageURL=='Xproduct.html') {
+  if(url=='account.html') loadOption('accStaffId','Staffs','id','stfNameEN');
+  if(url=='Xproduct.html') {
     loadOption('proCategory','Categorys','id','catName');
-    loadOption('proAccount','Accounts','id','accStaffId');
+    // loadOption('proAccount','Accounts','id','accStaffId');
     setInitValue('proAccount',activeMenu.formName,defaultUser.email);
   }
-  if(activeMenu.pageURL=='order.html') {
+  if(url=='order.html') {
     // loadOption('ordProductId','Products','id','proName');
     loadOption('ordCustomerId','Customers','id','cusFullName');
     setInitValue('ordDate','itemfm',new Date().toJSON().slice(0, 10));
     setInitValue('ordCreatedBy','itemfm',defaultUser.email);
-    let pros = document.getElementById('productSelect');
-    pros.innerHTML=getItems();
+    refreshItem();
   }
+  if (url=='stock.html') {
+    loadOption('stkProductId','Products','id','proName');
+    loadOption('stkSupplier','Suppliers','id','supName');
+    setInitValue('stkExpotBy',activeMenu.formName,defaultUser.email);
+    setInitValue('stkQty',activeMenu.formName,'1');
+  }
+}
+
+function refreshItem() {
+  let pros = document.getElementById('productSelect');
+  pros.innerHTML=getItems();
+}
+
+function getStockQty() {
+  var re = {};
+  const stk = mapMenu['Stocks'].data.length>0 ? mapMenu['Stocks'].data : retrieveFromStorage(mapMenu['Stocks'].storageKey);
+  // console.log('data.length?'+mapMenu['Stocks'].data.length);
+  // console.log('stk ?',stk);
+  if(stk!=undefined){
+    for (let index = 0; index <stk.length; index++){
+      if(re[stk[index]['stkProductId']]==undefined||re[stk[index]['stkProductId']]==null) re[stk[index]['stkProductId']]=0;
+      re[stk[index]['stkProductId']]+=parseInt(stk[index]['stkQty']);
+    }
+  }
+  // console.log('re ?',re);
+  return re;
 }
 
 function getItems() {
   const listPro = retrieveFromStorage(mapMenu['Products'].storageKey);
   // console.log(listPro);
+  const x =  getStockQty();
+  // console.log('x?',x);
   let rex = '';
   if(listPro!=undefined){
-    for (let index = 0; index <listPro.length; index++) rex += itemsDiv(listPro[index]);
+    for (let index = 0; index <listPro.length; index++) rex += itemsDiv(listPro[index],x[listPro[index]['id']]==undefined?0:parseInt(x[listPro[index]['id']]));
   }
   return rex;
 }
 
-function itemsDiv(pro) {
+function itemsDiv(pro,qty) {
   return ''
-  +'<div onclick="doAddItem(\''+pro['id']+'\');" class="col-sm-4 m-2 item_type" style="cursor:pointer;background-color:rgb(255, 102, 0);">' 
-  +    '<h5><i class="fas fa-cart-arrow-down"></i>'+pro['proName']+'</h5>'
-  +    '<h5><i class="fas fa-barcode"></i>000005</h5>'
+  +'<div onclick="doAddItem(\''+pro['id']+'\');" class="item_type" style="cursor:pointer;">' 
+  +    '<h5><i class="fas fa-cart-arrow-down"></i>('+qty+')<br>'+pro['proName']+'</h5>'
+  +    '<h5><i class="fas fa-barcode"></i>'+pro['id']+'</h5>'
   +    '<h5><i class="fas fa-money-check-alt"></i> $'+pro['proPrice']+' </h5>'
   +'</div>';
 }
 
 function doAddItem(proId) {
   // console.log('doAddItem?',proId);
+  // console.clear();
   let doc = document['itemfm'];
   let pro = getRecord('Products',proId);
   if(pro==undefined||pro==null) return showToast('error','invalid product.');
@@ -235,18 +264,73 @@ function doAddItem(proId) {
   item['itmProductId'] = pro['id'];
   item['product'] = pro;
   //exist ?? alredy added
-  if(items[item['itmProductId']]!=undefined){
-    items[item['itmProductId']]['qty']+=parseInt(item['qty']);
-    items[item['itmProductId']]['itmAmount']=calAmount(items[item['itmProductId']]['qty'],item['price']);
+  let existPro = null;
+  if(items[item['itmProductId']]!=undefined) existPro = items[item['itmProductId']];
+  //update stock validation?? outstock
+  if(updateStock(pro['id'],item['qty'])==false){
+    return showToast('warning','Product ['+pro['proName']+'] outstock.',{duration:3000});
   }
   else {
+    ////exist ?? alredy added
+    if(existPro!=null){
+      items[item['itmProductId']]['qty']+=parseInt(item['qty']);
+      items[item['itmProductId']]['itmAmount']=calAmount(items[item['itmProductId']]['qty'],item['price']);
+    }
     //new item
-    item['itmAmount'] = calAmount(item['qty'],item['price']);
-    items[pro['id']]=item;
+    else{
+      item['itmAmount'] = calAmount(item['qty'],item['price']);
+      items[pro['id']]=item;
+    }
   }
   // console.log(item);
   // console.log(items);
+  refreshItem();
   loadItems();
+}
+
+function updateStock(proId,Qtyx) {
+  let stock = mapMenu['Stocks'].data.length>0 ? mapMenu['Stocks'].data : retrieveFromStorage(mapMenu['Stocks'].storageKey); 
+  // console.log('stock?',stock);
+  // console.log(proId);
+  // console.log('updateStockQty?'+Qty);
+  let foundIndex = [], currentQty=0;
+  for (let index = 0; index < stock.length; index++) {
+    if (stock[index]['stkProductId']==proId) {
+      foundIndex.push(index);
+      currentQty+=parseInt(stock[index]['stkQty']);
+      // console.log('stockQty?'+stock[index]['stkQty']);
+    }
+  }
+  // console.log('currentQty ? '+currentQty+', Qtyx?'+Qtyx);
+  let number = currentQty - parseInt(Qtyx);
+  // console.log('foundIndex ?',foundIndex);
+  // update stock
+  if(number>=0) {
+    // stock[index]['stkQty'] = number;
+    let Qty = Qtyx;
+    for (let x in foundIndex) {
+      let i = foundIndex[x];
+      // console.log('stk?',stock[i]);
+      // console.log('stock[i][stkQty] ? '+stock[i]['stkQty']+', Qty?'+Qty);
+      if((parseInt(stock[i]['stkQty'])-Qty)<=0){
+        // console.log('<=0');
+        Qty = Qty - parseInt(stock[i]['stkQty']);
+        stock[i]['stkQty']=0;
+        // console.log('stock[i][stkQty]?'+stock[i]['stkQty']);
+      }
+      else if((parseInt(stock[i]['stkQty'])-Qty)>0) {
+        // console.log('>0');
+        stock[i]['stkQty']=parseInt(stock[i]['stkQty'])-Qty;
+        // console.log('stock[i][stkQty]?'+stock[i]['stkQty']);
+        break;
+      }
+    }
+    // console.log('stock?',stock);
+    mapMenu['Stocks'].data=stock;
+    // console.log('mapMenu[Stocks].data?',mapMenu['Stocks'].data);
+    return true;
+  }
+  return false;
 }
 
 function calAmount(qty,price) {
@@ -296,7 +380,7 @@ function createOrderRecord(rec) {
   res['invDiscount'] = '';
   res['invTotal'] = parseFloat(items['payment']['ChangReturn']);
   res['invReccive'] = parseFloat(items['payment']['ReceivedAmount']);
-  res['invReturn'] = parseFloat(items['payment']['RemainAmount']);
+  res['invReturn'] = items['payment']['completePay']==true?parseFloat(items['payment']['RemainAmount']):0;
   res['invPaymentSatus'] = items['payment']['completePay']==true?'Complete':'InComplete';
   res['invType'] = items['payment']['Type'];
   res['invInreccive'] = items['payment']['completePay']!=true?items['payment']['RemainAmount']:0;
@@ -496,7 +580,8 @@ function laodData() {
   if(!tbl) return;
   let tblbody = tbl.children[1];
   // console.log(tblbody);
-  let atr ='';
+  let atr ='',isSkip=false;
+  isSkip = (activeMenu.pageURL=='invoice.html');
   for (let index = 0; index < activeMenu.data.length; index++) {
     let tr ='<tr>';
     const pro = activeMenu.data[index];
@@ -515,11 +600,13 @@ function laodData() {
     '<td>'
     +    '<button onclick="doRemoveRecord(\''+pro.id+'\');" class="mx-1 px-1 py-0 btn btn-sm btn-outline-danger p-2">'
     +        '<i class="fas fa-trash-alt"></i>'
-    +    '</button>'
-    +    '<a onclick="doEditRecord(\''+pro.id+'\');" class="mx-1 px-1 py-0 btn btn-sm btn-outline-primary p-2" href="#" role="button">'
+    +    '</button>';
+
+    if(!isSkip)btn +=    '<a onclick="doEditRecord(\''+pro.id+'\');" class="mx-1 px-1 py-0 btn btn-sm btn-outline-primary p-2" href="#" role="button">'
     +        '<i class="fas fa-edit"></i>'
-    +    '</a>'
-    +'</td>';
+    +    '</a>';
+
+    btn+='</td>';
     atd+=btn;
     tr+=atd+'</tr>';
     atr+=tr;
@@ -560,15 +647,15 @@ function doAdd(evt) {
       updateRecord(rec);
       showToast('success','record updated.');
     }
-    console.log(rec);
-    console.log(activeMenu.data);
+    // console.log(rec);
+    // console.log(activeMenu.data);
     let btnCancel = document.getElementById('cancel');
     if(btnCancel!=undefined&&btnCancel!=null) btnCancel.click();
     // top form
     if(activeMenu.pageURL=='Xproduct.html') clearProductForm();
-    if(activeMenu.pageURL=='order.html'){}
+    else if(activeMenu.pageURL=='order.html'){}
     else clearForm();
-    if(isOrder) doSave();
+    if(isOrder) doSave(); 
   laodData();
 }
 
@@ -577,6 +664,7 @@ function clearProductForm() {
   for (let i in activeMenu.fields){
     const x = activeMenu.fields[i];
     if(fdoc[x]!=undefined){
+      // console.log((x!='proCategory' && x!='proStatus' && x!='proAccount')+x);
       if (x!='proCategory' && x!='proStatus' && x!='proAccount') fdoc[x].value='';
     }
   }
@@ -596,6 +684,7 @@ function clearForm() {
   for (let i in fields){
     const x = fields[i];
     if(fdoc[x]!=undefined){
+      if(fdoc[x].disabled==true) continue;
       fdoc[x].value='';
     }
   }
@@ -636,6 +725,10 @@ function doEditRecord(proId) {
 function doSave() {
   if(confirm('save to local storage?')){
     save2Storage(activeMenu.storageKey,activeMenu.data);
+    if(activeMenu.pageURL=='order.html'){
+      save2Storage(mapMenu['Stocks'].storageKey,mapMenu['Stocks'].data);
+      navigateTo('invoice.html'); 
+    }
     //location.reload();
     showToast('success','data saved to local storage sucess.');
   }
@@ -649,8 +742,31 @@ function doSingOut() {
   if (confirm('are you sure want to singout?')) navigateTo('index.html'); 
 }
 
+function updateMoneyDasboard() {
+  const invoice = retrieveFromStorage(mapMenu['Invoices'].storageKey);
+  var money = { USD:{Total:0,Inreccive:0},KH:{Total:0,Inreccive:0} };
+  if(invoice!=null){
+    for (let index = 0; index < invoice.length; index++) {
+      const inc = invoice[index];
+      money[inc['invType']]['Total'] += parseFloat(inc['invTotal']);
+      money[inc['invType']]['Inreccive'] += parseFloat(inc['invInreccive']);
+    }
+  }
+  
+  var rew ='<div class="row">';
+  for (const type in money) {
+    if (Object.hasOwnProperty.call(money, type)) {
+      const element = money[type];
+      rew += getMoneyCard(element,type);
+    }
+  }
+  rew += '<div>';
+  document.getElementById('pageContent').innerHTML=rew;
+}
+
 function dasboardAnalyRender(listOBj) {
   let cards='';
+  updateMoneyDasboard();
   for (const inx in listOBj) {
     const keyx = listOBj[inx];
     // console.log('keyx ?',keyx);
@@ -794,6 +910,38 @@ function getDasboardTemplete(menuLi) {
   +    '</nav>'
   +  '</div>'
   +'</div>';
+}
+
+function getMoneyCard(element,type) {
+  return '<div class="col-xl-5 col-md-6 mb-4">'
+  +   '<div class="card border-left-primary shadow h-100 py-2" style="background:#d3d3d3;">'
+  +       '<div class="card-body">'
+  +           '<div class="row no-gutters align-items-center">'
+  +               '<div class="col mr-2">'
+  +                   '<div class="text-xs font-weight-bold text-dark text-uppercase mb-1">'
+  +                       'Total'
+  +                   '</div>'
+  +                   '<div class="h5 mb-0 font-weight-bold text-gray-800">'+element['Total']+'</div>'
+  +               '</div>'
+  +               '<div class="col mr-2">'
+  +                   '<div class="text-xs font-weight-bold text-dark text-uppercase mb-1">'
+  +                       'Reccive'
+  +                   '</div>'
+  +                   '<div class="h5 mb-0 font-weight-bold text-gray-800">'+(parseFloat(element['Total']) - parseFloat(element['Inreccive']))+'</div>'
+  +               '</div>'
+  +               '<div class="col mr-2">'
+  +                   '<div class="text-xs font-weight-bold text-dark text-uppercase mb-1">'
+  +                       'indebted'
+  +                   '</div>'
+  +                   '<div class="h5 mb-0 font-weight-bold text-gray-800">'+element['Inreccive']+'</div>'
+  +               '</div>'
+  +               '<div class="col-auto">'
+  +                   '<b style="font-size:25px;">'+type+'</b>'
+  +               '</div>'
+  +           '</div>'
+  +       '</div>'
+  +   '</div>'
+  +'</div>'
 }
 
 //end dasboard
