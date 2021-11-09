@@ -19,7 +19,7 @@ var defaultUser = {
 //@key of all function, can't not null/undefined
 var activeMenu = null, temp=null;;
 var items = {}//proId:data;
-var dasboardObj= ['Customers','Staffs','Accounts','Products','Suppliers','Orders','Invoices'];
+var dasboardObj= ['Customers','Staffs','Accounts','Products','Suppliers','Orders','List Sale'];
 
 //menu must setup in here
 //@add @remove @update @save @rendertable @clear @loadmenu 
@@ -68,7 +68,7 @@ var mapMenu = {
     pageURL:'account.html'
     ,icon:'fas fa-users fa-lg'
     ,isActive:false
-    ,fields : ['id','accStaffId','accRole','accUsername','accPassword','accStatus']
+    ,fields : ['id','accStaffId','accUsername','accRole','accPassword','accStatus']
     ,storageKey:'account.html'
     ,data : []
     ,formName:'accountfm'
@@ -147,7 +147,7 @@ var mapMenu = {
     ,isOverrideForm:false
     // ,addNewFormId:'addNewModel'
   }
-  ,'Invoices':{
+  ,'List Sale':{
     pageURL:'invoice.html'
     ,icon:'fas fa-file-invoice-dollar fa-lg'
     ,isActive:false
@@ -743,7 +743,7 @@ function doSingOut() {
 }
 
 function updateMoneyDasboard() {
-  const invoice = retrieveFromStorage(mapMenu['Invoices'].storageKey);
+  const invoice = retrieveFromStorage(mapMenu['List Sale'].storageKey);
   var money = { USD:{Total:0,Inreccive:0},KH:{Total:0,Inreccive:0} };
   if(invoice!=null){
     for (let index = 0; index < invoice.length; index++) {
