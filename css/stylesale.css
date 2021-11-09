@@ -33,8 +33,8 @@
     float: left;
     padding: 10px;
     margin: 5px;
-    height: auto;
-    max-height: 50%;
+    height: 200px;
+    /* max-height: 50%; */
     width: 30%;
     border-radius: 10px;
     font-weight:bold;
