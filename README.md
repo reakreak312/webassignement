@@ -1,6 +1,6 @@
-# === Royal University Of Phnom Penh ===
+# ===== Royal University Of Phnom Penh =====
 # ============= E2 Year4 =============
-# Web Application Development by Chim Bunthoen
+# Web Application Development by Mr Chim Bunthoen
 # Topic: Inventory Managerment System
 
 # Team member:
